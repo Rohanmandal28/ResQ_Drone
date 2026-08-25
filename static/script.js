@@ -14,7 +14,41 @@ function addLog(message) {
 }
 
 
-// START MISSION
+// Get status from Flask backend
+async function updateSystemStatus() {
+    try {
+        const response = await fetch("/api/status");
+
+        if (!response.ok) {
+            throw new Error("Server error");
+        }
+
+        const data = await response.json();
+
+        // Update drone status
+        document.getElementById("droneStatus").textContent = data.drone;
+
+        // Update mission status
+        document.getElementById("missionStatus").textContent = data.mission;
+
+        // Update system status
+        const systemStatus = document.querySelector(".system-status");
+
+        if (data.system === "Online") {
+            systemStatus.textContent = "● System Online";
+        } else {
+            systemStatus.textContent = "● System Offline";
+        }
+
+    } catch (error) {
+        console.error("Backend connection error:", error);
+
+        document.querySelector(".system-status").textContent =
+            "● Backend Offline";
+    }
+}
+
+
 document.getElementById("startMissionBtn").addEventListener("click", function () {
 
     document.getElementById("missionStatus").textContent = "ACTIVE";
@@ -28,7 +62,6 @@ document.getElementById("startMissionBtn").addEventListener("click", function ()
 });
 
 
-// SCAN AREA
 function scanArea() {
 
     addLog("Drone started scanning the area.");
@@ -38,7 +71,6 @@ function scanArea() {
 }
 
 
-// LOCATE VICTIM
 function locateVictim() {
 
     addLog("AI system searching for possible victims.");
@@ -48,7 +80,6 @@ function locateVictim() {
 }
 
 
-// RETURN DRONE
 function returnDrone() {
 
     addLog("Return-to-home command sent.");
@@ -58,3 +89,8 @@ function returnDrone() {
     document.getElementById("droneStatus").textContent = "Returning Home";
 
 }
+
+updateSystemStatus();
+
+
+setInterval(updateSystemStatus, 5000);

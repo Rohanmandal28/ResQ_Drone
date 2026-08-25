@@ -1,0 +1,296 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #07131d;
+    color: #f1f7fa;
+    min-height: 100vh;
+}
+
+.navbar {
+    width: 100%;
+    padding: 24px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.logo span {
+    margin-left: 8px;
+}
+
+.system-status {
+    color: #65d7e8;
+    font-size: 13px;
+}
+
+.container {
+    width: 86%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* HERO */
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 75px 0 55px;
+}
+
+.hero-text {
+    max-width: 650px;
+}
+
+.eyebrow {
+    color: #4ed9ed;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.hero h1 {
+    font-size: clamp(42px, 5vw, 68px);
+    line-height: 0.98;
+    margin: 18px 0;
+    letter-spacing: -2px;
+}
+
+.hero p {
+    color: #9eb0ba;
+    line-height: 1.6;
+    max-width: 570px;
+}
+
+.mission-status {
+    min-width: 190px;
+}
+
+.mission-status span {
+    display: block;
+    color: #8798a1;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+.mission-status strong {
+    display: block;
+    color: #52dff0;
+    font-size: 27px;
+    margin: 8px 0;
+}
+
+.mission-status small {
+    color: #647983;
+}
+
+
+/* STATUS CARDS */
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.status-card {
+    background: rgba(20, 39, 51, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 25px 22px;
+    min-height: 150px;
+    transition: 0.25s;
+}
+
+.status-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(78, 217, 237, 0.35);
+}
+
+.card-icon {
+    font-size: 18px;
+    margin-bottom: 18px;
+}
+
+.status-card h3 {
+    color: #b9c7cd;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.status-card h2 {
+    font-size: 17px;
+    margin-bottom: 8px;
+}
+
+.status-card p {
+    color: #4ed9ed;
+    font-size: 11px;
+}
+
+
+/* MISSION */
+
+.mission-section {
+    padding: 70px 0;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 35px;
+}
+
+.section-heading h2,
+.mission-log h2 {
+    font-size: 28px;
+    margin-top: 10px;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    color: white;
+    background: #08aeca;
+    padding: 13px 20px;
+    border-radius: 7px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #12c5e0;
+    transform: translateY(-2px);
+}
+
+
+/* OPERATION PANELS */
+
+.operation-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 18px;
+}
+
+.panel {
+    background: rgba(20, 39, 51, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    min-height: 220px;
+}
+
+.panel h3 {
+    font-size: 15px;
+    margin-bottom: 35px;
+}
+
+.telemetry-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+}
+
+.telemetry-grid span {
+    display: block;
+    color: #71858e;
+    font-size: 11px;
+    margin-bottom: 8px;
+}
+
+.telemetry-grid strong {
+    font-size: 19px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.actions button {
+    text-align: left;
+    background: rgba(255, 255, 255, 0.035);
+    color: #d8e3e7;
+}
+
+.actions button:hover {
+    background: rgba(78, 217, 237, 0.12);
+}
+
+
+/* MISSION LOG */
+
+.mission-log {
+    padding-top: 65px;
+}
+
+#missionLog {
+    margin-top: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.log-item {
+    padding: 17px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: #9eb0ba;
+    font-size: 13px;
+}
+
+.log-item span {
+    color: #4ed9ed;
+    font-size: 10px;
+    font-weight: bold;
+    margin-right: 25px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+
+    .hero {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 35px;
+    }
+
+    .status-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .operation-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 550px) {
+
+    .container {
+        width: 90%;
+    }
+
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 20px;
+    }
+}

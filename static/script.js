@@ -1,5 +1,9 @@
 const missionLog = document.getElementById("missionLog");
 
+let missionActive = false;
+let simulationRunning = false;
+
+// Add message to mission log
 function addLog(message) {
     const item = document.createElement("div");
 
@@ -14,83 +18,144 @@ function addLog(message) {
 }
 
 
-// Get status from Flask backend
-async function updateSystemStatus() {
-    try {
-        const response = await fetch("/api/status");
+// ------------------------------
+// SIMULATED DRONE TELEMETRY
+// ------------------------------
 
-        if (!response.ok) {
-            throw new Error("Server error");
-        }
+let telemetry = {
+    altitude: 18.5,
+    speed: 21.8,
+    battery: 87,
+    gps: "GPS LOCKED"
+};
 
-        const data = await response.json();
 
-        // Update drone status
-        document.getElementById("droneStatus").textContent = data.drone;
+// Update telemetry on dashboard
+function updateTelemetry() {
 
-        // Update mission status
-        document.getElementById("missionStatus").textContent = data.mission;
+    document.getElementById("altitude").textContent =
+        telemetry.altitude.toFixed(1) + " m";
 
-        // Update system status
-        const systemStatus = document.querySelector(".system-status");
+    document.getElementById("speed").textContent =
+        telemetry.speed.toFixed(1) + " km/h";
 
-        if (data.system === "Online") {
-            systemStatus.textContent = "● System Online";
-        } else {
-            systemStatus.textContent = "● System Offline";
-        }
+    document.getElementById("battery").textContent =
+        telemetry.battery + " %";
 
-    } catch (error) {
-        console.error("Backend connection error:", error);
-
-        document.querySelector(".system-status").textContent =
-            "● Backend Offline";
-    }
+    document.getElementById("gps").textContent =
+        telemetry.gps;
 }
 
+
+// Simulate changing drone data
+function simulateTelemetry() {
+
+    if (!simulationRunning) {
+        return;
+    }
+
+    // Small realistic changes
+    telemetry.altitude += (Math.random() - 0.5) * 1.5;
+
+    telemetry.speed += (Math.random() - 0.5) * 2;
+
+    telemetry.battery -= 0.05;
+
+    // Keep values within reasonable limits
+    telemetry.altitude = Math.max(5, Math.min(50, telemetry.altitude));
+
+    telemetry.speed = Math.max(5, Math.min(35, telemetry.speed));
+
+    telemetry.battery = Math.max(0, telemetry.battery);
+
+    updateTelemetry();
+}
+
+
+// ------------------------------
+// START MISSION
+// ------------------------------
 
 document.getElementById("startMissionBtn").addEventListener("click", function () {
 
+    missionActive = true;
+    simulationRunning = true;
+
     document.getElementById("missionStatus").textContent = "ACTIVE";
 
-    document.getElementById("droneStatus").textContent = "Mission Started";
+    document.getElementById("droneStatus").textContent =
+        "Mission Started";
 
     addLog("Rescue mission started.");
 
+    addLog("Simulated drone telemetry activated.");
+
     this.textContent = "✓ Mission Active";
 
+    updateTelemetry();
 });
 
 
+// ------------------------------
+// SCAN AREA
+// ------------------------------
+
 function scanArea() {
+
+    if (!missionActive) {
+        addLog("Start the mission before scanning.");
+        return;
+    }
 
     addLog("Drone started scanning the area.");
 
-    document.getElementById("missionStatus").textContent = "SCANNING";
-
+    document.getElementById("missionStatus").textContent =
+        "SCANNING";
 }
 
+
+// ------------------------------
+// LOCATE VICTIM
+// ------------------------------
 
 function locateVictim() {
 
+    if (!missionActive) {
+        addLog("Start the mission before victim detection.");
+        return;
+    }
+
     addLog("AI system searching for possible victims.");
 
-    document.getElementById("missionStatus").textContent = "SEARCHING";
-
+    document.getElementById("missionStatus").textContent =
+        "SEARCHING";
 }
 
+
+// ------------------------------
+// RETURN DRONE
+// ------------------------------
 
 function returnDrone() {
 
     addLog("Return-to-home command sent.");
 
-    document.getElementById("missionStatus").textContent = "RETURNING";
+    document.getElementById("missionStatus").textContent =
+        "RETURNING";
 
-    document.getElementById("droneStatus").textContent = "Returning Home";
+    document.getElementById("droneStatus").textContent =
+        "Returning Home";
 
+    simulationRunning = false;
 }
 
-updateSystemStatus();
+
+// ------------------------------
+// INITIAL TELEMETRY
+// ------------------------------
+
+updateTelemetry();
 
 
-setInterval(updateSystemStatus, 5000);
+// Update simulated telemetry every 2 seconds
+setInterval(simulateTelemetry, 2000);

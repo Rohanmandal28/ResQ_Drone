@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ResQDrone Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="navbar">
+        <div class="logo">
+            🚁 <span>ResQDrone</span>
+        </div>
+
+        <div class="system-status">
+            ● System Online
+        </div>
+    </header>
+
+
+    <!-- HERO SECTION -->
+    <main class="container">
+
+        <section class="hero">
+
+            <div class="hero-text">
+
+                <div class="eyebrow">
+                    AI-POWERED RESCUE PLATFORM
+                </div>
+
+                <h1>
+                    Emergency Drone<br>
+                    Command Center
+                </h1>
+
+                <p>
+                    Monitor rescue missions, drone status and emergency
+                    operations from one centralized dashboard.
+                </p>
+
+            </div>
+
+            <div class="mission-status">
+
+                <span>MISSION STATUS</span>
+
+                <strong id="missionStatus">
+                    ACTIVE
+                </strong>
+
+                <small>
+                    Waiting for drone connection
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <!-- STATUS CARDS -->
+        <section class="status-grid">
+
+            <div class="status-card">
+
+                <div class="card-icon">🚁</div>
+
+                <h3>Drone Status</h3>
+
+                <h2 id="droneStatus">
+                    Mission Started
+                </h2>
+
+                <p>Waiting for drone</p>
+
+            </div>
+
+
+            <div class="status-card">
+
+                <div class="card-icon">📍</div>
+
+                <h3>Location</h3>
+
+                <h2 id="location">
+                    No GPS Data
+                </h2>
+
+                <p>GPS unavailable</p>
+
+            </div>
+
+
+            <div class="status-card">
+
+                <div class="card-icon">⚠️</div>
+
+                <h3>Emergency Level</h3>
+
+                <h2>
+                    LOW
+                </h2>
+
+                <p>Monitoring environment</p>
+
+            </div>
+
+
+            <div class="status-card">
+
+                <div class="card-icon">🤖</div>
+
+                <h3>AI Detection</h3>
+
+                <h2>
+                    Standby
+                </h2>
+
+                <p>Ready for image analysis</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- MISSION CONTROL -->
+        <section class="mission-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">
+                        MISSION CONTROL
+                    </span>
+
+                    <h2>
+                        Rescue Operations
+                    </h2>
+                </div>
+
+                <button id="startMissionBtn">
+                    🚁 Start Mission
+                </button>
+
+            </div>
+
+
+            <!-- TELEMETRY + ACTIONS -->
+            <div class="operation-grid">
+
+                <div class="panel">
+
+                    <h3>📡 Live Telemetry</h3>
+
+                    <div class="telemetry-grid">
+
+                        <div>
+                            <span>Altitude</span>
+                            <strong id="altitude">— m</strong>
+                        </div>
+
+                        <div>
+                            <span>Speed</span>
+                            <strong id="speed">— km/h</strong>
+                        </div>
+
+                        <div>
+                            <span>Battery</span>
+                            <strong id="battery">— %</strong>
+                        </div>
+
+                        <div>
+                            <span>GPS</span>
+                            <strong id="gps">—</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <h3>🎯 Mission Actions</h3>
+
+                    <div class="actions">
+
+                        <button onclick="scanArea()">
+                            🔍 Scan Area
+                        </button>
+
+                        <button onclick="locateVictim()">
+                            📍 Locate Victim
+                        </button>
+
+                        <button onclick="returnDrone()">
+                            🏠 Return Drone
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MISSION LOG -->
+            <section class="mission-log">
+
+                <span class="eyebrow">
+                    ACTIVITY
+                </span>
+
+                <h2>
+                    Mission Log
+                </h2>
+
+                <div id="missionLog">
+
+                    <div class="log-item">
+                        <span>NOW</span>
+                        Rescue mission started.
+                    </div>
+
+                    <div class="log-item">
+                        <span>NOW</span>
+                        ResQDrone system initialized.
+                    </div>
+
+                    <div class="log-item">
+                        <span>NOW</span>
+                        Waiting for drone connection.
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

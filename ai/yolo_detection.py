@@ -1,5 +1,4 @@
 from ultralytics import YOLO
-from ultralytics import YOLO
 
 # Load YOLOv8 nano model
 model = YOLO("yolov8n.pt")
@@ -11,7 +10,6 @@ def detect_people(image_path):
     people = []
 
     for result in results:
-
         for box in result.boxes:
 
             class_id = int(box.cls[0])

@@ -102,7 +102,7 @@
 
                 <h3>Emergency Level</h3>
 
-                <h2>
+                <h2 id="emergencyLevel">
                     LOW
                 </h2>
 
@@ -117,7 +117,7 @@
 
                 <h3>AI Detection</h3>
 
-                <h2>
+                <h2 id="aiStatus">
                     Standby
                 </h2>
 
@@ -207,7 +207,69 @@
                 </div>
 
             </div>
+          <!-- AI DETECTION -->
+<section class="panel ai-detection">
 
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">AI COMPUTER VISION</span>
+
+            <h2>Drone Image Analysis</h2>
+
+            <p>
+                Upload an aerial image to detect people and estimate
+                the emergency risk level using YOLOv8.
+            </p>
+        </div>
+    </div>
+
+    <div class="ai-upload">
+
+        <input
+            type="file"
+            id="imageInput"
+            accept="image/*"
+        >
+
+        <button id="analyzeBtn" onclick="analyzeImage()">
+            🤖 Analyze Image
+        </button>
+
+    </div>
+
+    <div id="aiResult" class="ai-result">
+
+        <div>
+            <span>AI STATUS</span>
+            <strong id="aiAnalysisStatus">
+                Waiting for image
+            </strong>
+        </div>
+
+        <div>
+            <span>PEOPLE DETECTED</span>
+            <strong id="peopleCount">
+                0
+            </strong>
+        </div>
+
+        <div>
+            <span>RISK SCORE</span>
+            <strong id="riskScore">
+                —
+            </strong>
+        </div>
+
+        <div>
+            <span>RISK ZONE</span>
+            <strong id="riskZone">
+                —
+            </strong>
+        </div>
+
+    </div>
+
+</section>
 
             <!-- MISSION LOG -->
             <section class="mission-log">

@@ -1,161 +1,375 @@
-const missionLog = document.getElementById("missionLog");
+// ===============================
+// RESQDRONE DASHBOARD
+// ===============================
 
-let missionActive = false;
-let simulationRunning = false;
+// -------------------------------
+// Backend Status
+// -------------------------------
 
-// Add message to mission log
-function addLog(message) {
-    const item = document.createElement("div");
+async function updateSystemStatus() {
+    try {
+        const response = await fetch("/api/status");
+        const data = await response.json();
 
-    item.className = "log-item";
+        const droneStatus = document.getElementById("droneStatus");
 
-    item.innerHTML = `
+        if (droneStatus) {
+            droneStatus.textContent = data.drone;
+        }
+
+    } catch (error) {
+        console.error("Backend connection error:", error);
+    }
+}
+
+
+// -------------------------------
+// Start Mission
+// -------------------------------
+
+const startMissionBtn = document.getElementById("startMissionBtn");
+
+if (startMissionBtn) {
+
+    startMissionBtn.addEventListener("click", function () {
+
+        const missionStatus = document.getElementById("missionStatus");
+        const droneStatus = document.getElementById("droneStatus");
+
+        if (missionStatus) {
+            missionStatus.textContent = "ACTIVE";
+        }
+
+        if (droneStatus) {
+            droneStatus.textContent = "Mission Active";
+        }
+
+        addMissionLog("Drone mission started.");
+
+        simulateTelemetry();
+    });
+}
+
+
+// -------------------------------
+// Simulated Drone Telemetry
+// -------------------------------
+
+let telemetryRunning = false;
+
+function simulateTelemetry() {
+
+    if (telemetryRunning) {
+        return;
+    }
+
+    telemetryRunning = true;
+
+    updateTelemetry();
+
+    setInterval(updateTelemetry, 2000);
+}
+
+
+function updateTelemetry() {
+
+    const altitude = (15 + Math.random() * 10).toFixed(1);
+    const speed = (15 + Math.random() * 10).toFixed(1);
+    const battery = Math.floor(80 + Math.random() * 10);
+
+    const latitude = (22.57 + Math.random() * 0.01).toFixed(6);
+    const longitude = (88.36 + Math.random() * 0.01).toFixed(6);
+
+    const altitudeElement = document.getElementById("altitude");
+    const speedElement = document.getElementById("speed");
+    const batteryElement = document.getElementById("battery");
+    const gpsElement = document.getElementById("gps");
+    const locationElement = document.getElementById("location");
+
+    if (altitudeElement) {
+        altitudeElement.textContent = altitude + " m";
+    }
+
+    if (speedElement) {
+        speedElement.textContent = speed + " km/h";
+    }
+
+    if (batteryElement) {
+        batteryElement.textContent = battery + " %";
+    }
+
+    if (gpsElement) {
+        gpsElement.textContent = "LOCKED";
+    }
+
+    if (locationElement) {
+        locationElement.textContent =
+            latitude + ", " + longitude;
+    }
+}
+
+
+// -------------------------------
+// Mission Actions
+// -------------------------------
+
+function scanArea() {
+
+    addMissionLog("Area scanning initiated.");
+
+    const aiStatus = document.getElementById("aiStatus");
+
+    if (aiStatus) {
+        aiStatus.textContent = "Scanning";
+    }
+}
+
+
+function locateVictim() {
+
+    addMissionLog("Victim location analysis initiated.");
+
+    const aiStatus = document.getElementById("aiStatus");
+
+    if (aiStatus) {
+        aiStatus.textContent = "Searching";
+    }
+}
+
+
+function returnDrone() {
+
+    addMissionLog("Return-to-home command issued.");
+
+    const missionStatus = document.getElementById("missionStatus");
+    const droneStatus = document.getElementById("droneStatus");
+
+    if (missionStatus) {
+        missionStatus.textContent = "RETURNING";
+    }
+
+    if (droneStatus) {
+        droneStatus.textContent = "Returning";
+    }
+}
+
+
+// -------------------------------
+// Mission Log
+// -------------------------------
+
+function addMissionLog(message) {
+
+    const missionLog = document.getElementById("missionLog");
+
+    if (!missionLog) {
+        return;
+    }
+
+    const logItem = document.createElement("div");
+
+    logItem.className = "log-item";
+
+    logItem.innerHTML = `
         <span>NOW</span>
         ${message}
     `;
 
-    missionLog.prepend(item);
+    missionLog.prepend(logItem);
 }
 
 
-// ------------------------------
-// SIMULATED DRONE TELEMETRY
-// ------------------------------
+// -------------------------------
+// YOLOv8 AI IMAGE ANALYSIS
+// -------------------------------
 
-let telemetry = {
-    altitude: 18.5,
-    speed: 21.8,
-    battery: 87,
-    gps: "GPS LOCKED"
-};
+async function analyzeImage() {
 
+    const imageInput = document.getElementById("imageInput");
+    const aiStatus = document.getElementById("aiStatus");
+    const analysisStatus =
+        document.getElementById("aiAnalysisStatus");
 
-// Update telemetry on dashboard
-function updateTelemetry() {
+    const peopleCount =
+        document.getElementById("peopleCount");
 
-    document.getElementById("altitude").textContent =
-        telemetry.altitude.toFixed(1) + " m";
+    const riskScore =
+        document.getElementById("riskScore");
 
-    document.getElementById("speed").textContent =
-        telemetry.speed.toFixed(1) + " km/h";
+    const riskZone =
+        document.getElementById("riskZone");
 
-    document.getElementById("battery").textContent =
-        telemetry.battery + " %";
+    const emergencyLevel =
+        document.getElementById("emergencyLevel");
 
-    document.getElementById("gps").textContent =
-        telemetry.gps;
-}
+    const analyzeBtn =
+        document.getElementById("analyzeBtn");
 
 
-// Simulate changing drone data
-function simulateTelemetry() {
+    // Check image
+    if (!imageInput || !imageInput.files.length) {
 
-    if (!simulationRunning) {
+        alert("Please select a drone image first.");
+
         return;
     }
 
-    // Small realistic changes
-    telemetry.altitude += (Math.random() - 0.5) * 1.5;
 
-    telemetry.speed += (Math.random() - 0.5) * 2;
-
-    telemetry.battery -= 0.05;
-
-    // Keep values within reasonable limits
-    telemetry.altitude = Math.max(5, Math.min(50, telemetry.altitude));
-
-    telemetry.speed = Math.max(5, Math.min(35, telemetry.speed));
-
-    telemetry.battery = Math.max(0, telemetry.battery);
-
-    updateTelemetry();
-}
+    // Get selected image
+    const image = imageInput.files[0];
 
 
-// ------------------------------
-// START MISSION
-// ------------------------------
+    // Prepare FormData
+    const formData = new FormData();
 
-document.getElementById("startMissionBtn").addEventListener("click", function () {
-
-    missionActive = true;
-    simulationRunning = true;
-
-    document.getElementById("missionStatus").textContent = "ACTIVE";
-
-    document.getElementById("droneStatus").textContent =
-        "Mission Started";
-
-    addLog("Rescue mission started.");
-
-    addLog("Simulated drone telemetry activated.");
-
-    this.textContent = "✓ Mission Active";
-
-    updateTelemetry();
-});
+    formData.append("image", image);
 
 
-// ------------------------------
-// SCAN AREA
-// ------------------------------
-
-function scanArea() {
-
-    if (!missionActive) {
-        addLog("Start the mission before scanning.");
-        return;
+    // Update UI
+    if (aiStatus) {
+        aiStatus.textContent = "Analyzing";
     }
 
-    addLog("Drone started scanning the area.");
-
-    document.getElementById("missionStatus").textContent =
-        "SCANNING";
-}
-
-
-// ------------------------------
-// LOCATE VICTIM
-// ------------------------------
-
-function locateVictim() {
-
-    if (!missionActive) {
-        addLog("Start the mission before victim detection.");
-        return;
+    if (analysisStatus) {
+        analysisStatus.textContent = "Analyzing image...";
     }
 
-    addLog("AI system searching for possible victims.");
+    if (analyzeBtn) {
+        analyzeBtn.disabled = true;
+        analyzeBtn.textContent = "⏳ Analyzing...";
+    }
 
-    document.getElementById("missionStatus").textContent =
-        "SEARCHING";
+    addMissionLog("AI image analysis started.");
+
+
+    try {
+
+        // Send image to Flask backend
+        const response = await fetch("/api/detect", {
+            method: "POST",
+            body: formData
+        });
+
+
+        const data = await response.json();
+
+
+        // Handle backend error
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.error || "AI analysis failed."
+            );
+        }
+
+
+        // ---------------------------
+        // Detection Result
+        // ---------------------------
+
+        const detection = data.detection;
+
+        const risk = data.risk;
+
+
+        // People count
+        if (peopleCount) {
+
+            peopleCount.textContent =
+                detection.people_count;
+        }
+
+
+        // Risk score
+        if (riskScore) {
+
+            riskScore.textContent =
+                risk.risk_score;
+        }
+
+
+        // Risk zone
+        if (riskZone) {
+
+            riskZone.textContent =
+                risk.risk_zone;
+        }
+
+
+        // Update emergency level
+        if (emergencyLevel) {
+
+            emergencyLevel.textContent =
+                risk.risk_zone;
+        }
+
+
+        // AI status
+        if (aiStatus) {
+
+            aiStatus.textContent =
+                "Detection Complete";
+        }
+
+
+        if (analysisStatus) {
+
+            analysisStatus.textContent =
+                "Analysis complete";
+        }
+
+
+        addMissionLog(
+            "AI detected " +
+            detection.people_count +
+            " person(s)."
+        );
+
+
+        addMissionLog(
+            "Risk zone classified as " +
+            risk.risk_zone +
+            "."
+        );
+
+
+    } catch (error) {
+
+        console.error("AI Detection Error:", error);
+
+
+        if (aiStatus) {
+            aiStatus.textContent = "Error";
+        }
+
+        if (analysisStatus) {
+            analysisStatus.textContent =
+                "Analysis failed";
+        }
+
+        alert(
+            "AI analysis failed: " +
+            error.message
+        );
+
+
+    } finally {
+
+        if (analyzeBtn) {
+
+            analyzeBtn.disabled = false;
+
+            analyzeBtn.textContent =
+                "🤖 Analyze Image";
+        }
+    }
 }
 
 
-// ------------------------------
-// RETURN DRONE
-// ------------------------------
+// -------------------------------
+// Initialize Dashboard
+// -------------------------------
 
-function returnDrone() {
+updateSystemStatus();
 
-    addLog("Return-to-home command sent.");
-
-    document.getElementById("missionStatus").textContent =
-        "RETURNING";
-
-    document.getElementById("droneStatus").textContent =
-        "Returning Home";
-
-    simulationRunning = false;
-}
-
-
-// ------------------------------
-// INITIAL TELEMETRY
-// ------------------------------
-
-updateTelemetry();
-
-
-// Update simulated telemetry every 2 seconds
-setInterval(simulateTelemetry, 2000);
+setInterval(updateSystemStatus, 5000);

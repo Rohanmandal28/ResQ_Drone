@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from ai.yolo_detection import detect_people
+from ai.risk_detection import calculate_risk
 import os
 
 app = Flask(__name__)
@@ -26,6 +27,7 @@ def status():
 def detect():
     if "image" not in request.files:
         return jsonify({
+            "success": False,
             "error": "No image uploaded"
         }), 400
 
@@ -33,6 +35,7 @@ def detect():
 
     if image.filename == "":
         return jsonify({
+            "success": False,
             "error": "No image selected"
         }), 400
 
@@ -40,11 +43,24 @@ def detect():
     image.save(image_path)
 
     try:
-        result = detect_people(image_path)
+        # Step 1: YOLOv8 person detection
+        detection = detect_people(image_path)
+
+        people_count = detection["people_count"]
+
+        # Step 2: Risk calculation
+        # Currently hazard=False and accessibility=1.0
+        # These values will be replaced with AI/map data later.
+        risk = calculate_risk(
+            people_count=people_count,
+            hazard_detected=False,
+            accessibility=1.0
+        )
 
         return jsonify({
             "success": True,
-            "detection": result
+            "detection": detection,
+            "risk": risk
         })
 
     except Exception as e:
